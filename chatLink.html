@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script type="text/javascript" >
+var access_token;
+var uniqueid;
+getToken = function()
+{
+var client_id = "jknOdL5i07Q";
+var client_secret = "rHLp_vy7FbA";
+var uniqueid = "user" + Math.floor((Math.random() * 10) + 1);
+var timestamp = new Date().getTime();
+//var hash = CryptoJS.HmacSHA256(client_id + "" + uniqueid + "" + timestamp, client_secret);
+//var signature = rtrim(strtr(CryptoJS.enc.Base64.stringify(hash), '+/', '-_'), '=');
+var firstname = uniqueid;
+
+$.ajax({
+method: "POST",
+url: "https://apisandbox.moxtra.com/oauth/token",
+data: {
+client_id: client_id,
+client_secret: client_secret,
+grant_type: "http://www.moxtra.com/auth_uniqueid",
+uniqueid: uniqueid,
+timestamp: timestamp,
+//signature: signature,
+firstname: firstname
+},
+async: false,
+success: function(data, textStatus, jqXHR) {
+access_token = data.access_token;
+alert(access_token);
+},
+error: function (jqXHR, textStatus, errorThrown) {
+console.log(textStatus);
+}
+});
+
+if (access_token) {
+// Initialize Moxtra SDK Object
+var options = {
+mode: "sandbox", 
+client_id: client_id,
+access_token: access_token,
+invalid_token: function(event) {
+//Triggered when the access token is expired or invalid
+alert("Access Token expired for session id: " + event.session_id);
+}
+};
+alert("The unique Id for the user is "+uniqueid);
+Moxtra.init(options);
+}
+else {
+//Authenticate and get access token for the user before proceeding further
+console.log ("No access token found");
+}
+}
+
+function start_chat () {
+var chat_options = {
+//unique id of the users who will be part of the chat. These users should already exist in Moxtra.
+email: "sanjay@moxtra.com",
+//unique_id: uniqueid,
+iframe: true,
+//ID of the HTML tag within which the chat window will show up. Refer https://developer.grouphour.com/moxo/docs-js-sdk/#conversation
+tagid4iframe: "chat-container",
+iframewidth: "400px",
+iframeheight: "600px",
+autostart_meet: false,
+autostart_note: true,
+extension: { "show_dialogs": { "member_invite": true } },
+start_chat: function(event) {
+console.log("Chat started binder ID: " + event.binder_id);
+//Your application server can upload files to draw using the binder_id and access_token
+},
+start_meet: function(event) {
+console.log("Meet started session key: " + event.session_key + " session id: " + event.session_id);
+},
+end_meet: function(event) {
+console.log("Meet end event");
+},
+invite_member: function(event) {
+console.log("Invite member into binder Id: " + event.binder_id);
+},
+request_note: function(event) {
+console.log("Note start request");
+},
+request_meet: function(event) {
+alert("Meet request event" + event.binder_id);
+},
+receive_feed: function(event) {
+alert("Inside receive_feed");
+alert("Meet request event" + event.binder_id);
+},
+error: function(event) {
+console.log("Chat error code: " + event.error_code + " error message: " + event.error_message);
+}
+}; 
+Moxtra.chat(chat_options);
+}
+</script>
+</head>
+
+<body onload="getToken()">
+    <a id="startChat" href="javascript:start_chat();"> Start Moxtra Chat </a> 
+<script type="text/javascript" src="https://www.moxtra.com/api/js/moxtra-latest.js" id="moxtrajs"></script>
+</body>
+</html>
