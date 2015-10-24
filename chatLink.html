@@ -5,9 +5,12 @@
 
 <meta charset="utf-8">
 
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+    
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 <script type="text/javascript" >
+
 var access_token;
 var uniqueid;
 getToken = function()
@@ -108,7 +111,7 @@ Moxtra.chat(chat_options);
 </head>
 
 <body onload="getToken()">
-    <a id="startChat" href="javascript:start_chat();"> Start a Chat! </a> 
+    <a id="startChat" class = "button" href="javascript:start_chat();" > Start a Chat! </a> 
   <!--<form>
         <input id = "emails" type = "text" value = "emails of those who you want chat with:">
     </form> -->

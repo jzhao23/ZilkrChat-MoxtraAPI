@@ -1,0 +1,20 @@
+.button {
+    
+    
+    display: block;
+    height: 100px;
+    width: 300px;
+    background: orange;
+    border: 2px solid orange;
+    
+    color: blue;
+    text-align: center;
+    font: bold 3.2em/100px "Futura";
+    
+    background: linear-gradient(top, #34696f, #2f5f63);
+    border-radius: 50px;
+    box-shadow: 0 8px 0 #1b383b;
+    text-shadow: 0 2px 2px rgba(255, 255, 255, 0.2);
+    
+    
+}
